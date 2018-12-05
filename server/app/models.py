@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 # Таблица с пользователями в базе
@@ -9,6 +10,14 @@ class User(db.Model):
     email = db.Column(db.String(128), unique=True, index=True)
     password = db.Column(db.String(128))
     projects = db.relationship('Project', backref='user', lazy='dynamic')
+
+    # хеширование пароля
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    # сравнение хешей паролей
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
