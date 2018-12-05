@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-class Config():
+class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you_will_not_guess'
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
