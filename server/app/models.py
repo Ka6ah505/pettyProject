@@ -22,6 +22,22 @@ class Project(db.Model):
     describe = db.Column(db.String(1000))
     startDate = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     endDate = db.Column(db.DateTime)
+    tasks = db.relationship('Task', backref='project', lazy='dynamic')
 
     def __repr__(self):
         return '<Project {0}, start {1}>'.format_map(self.title, self.startDate)
+
+
+# Таблица с задачами по проектам
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    idProject = db.Column(db.Integer, db.ForeignKey('project.id'))
+    title = db.Column(db.String(128), index=True)
+    describe = db.Column(db.String(1000), nullable=False)
+    status = db.Column(db.String(64), index=True, nullable=False)
+    createDate = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    startDate = db.Column(db.DateTime, index=True)
+    endDate = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return '<Task {0}\t, create {1}\t, status {2}>'.format(self.title, self.createDate, self.status)
