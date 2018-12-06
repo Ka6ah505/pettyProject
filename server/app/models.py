@@ -1,10 +1,11 @@
-from app import db
+from app import db, login
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import UserMixin
 
 
 # Таблица с пользователями в базе
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
     email = db.Column(db.String(128), unique=True, index=True)
@@ -50,3 +51,7 @@ class Task(db.Model):
 
     def __repr__(self):
         return '<Task {0}\t, create {1}\t, status {2}>'.format(self.title, self.createDate, self.status)
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
