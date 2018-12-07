@@ -52,6 +52,7 @@ class Task(db.Model):
     def __repr__(self):
         return '<Task {0}\t, create {1}\t, status {2}>'.format(self.title, self.createDate, self.status)
 
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
